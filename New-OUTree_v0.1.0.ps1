@@ -1,4 +1,4 @@
-﻿function New-OUTree
+Function New-OUTree
 {
 
 param(
@@ -6,13 +6,13 @@ param(
     [Parameter(Mandatory=$true)]$OUNames
     )
 ## Check if AD module is installed
-if (Get-Module -ListAvailable -Name ActiveDirectory) { Write-Host -ForegroundColor Green "ActiveDirectory module exists" } else { Write-Warning "ActiveDirectory module does not exist. Exiting."; break }
+If (Get-Module -ListAvailable -Name ActiveDirectory) { Write-Host -ForegroundColor Green "ActiveDirectory module exists" } else { Write-Warning "ActiveDirectory module does not exist. Exiting."; break }
 
 ## Importing ActiveDirectory module
-Import-Module ActiveDirectory
+If ( ! (Get-module ActiveDirectory )) { Import-Module ActiveDirectory }
 
 ## Validate domain name
-if( !($Domain -match "(?=^.{4,253}$)(^((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\.)+[a-zA-Z]{2,63}$)") -eq $true) { Write-Warning "Domain name not acceptable."; break }
+If( !($Domain -match "(?=^.{4,253}$)(^((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\.)+[a-zA-Z]{2,63}$)") -eq $true) { Write-Warning "Domain name not acceptable."; break }
 
 ## Change $Domain string to "DC=subdomain,DC=domain,DC=suffix" (formatting)
 $DomainRootString = $null
@@ -21,10 +21,10 @@ $DomainSplit = $Domain.Split('.')
 $DomainSplit | foreach { $DomainRootString += "DC=$_" }
 $DomainRootStringFinal = ($DomainRootString.Replace("DC=",",DC=")).substring(1)
 
-try{ cd AD:\$DomainRootStringFinal -ErrorAction Stop }
-catch{ Write-Warning "Unable to connect to $Domain ($DomainRootStringFinal) with AD PSDrive. Check domain name.  Exiting"; break }
+Try{ cd AD:\$DomainRootStringFinal -ErrorAction Stop }
+Catch{ Write-Warning "Unable to connect to $Domain ($DomainRootStringFinal) with AD PSDrive. Check domain name.  Exiting"; break }
 
-foreach($OUName in $OUNames){
+Foreach($OUName in $OUNames){
 
     Write-Host -ForegroundColor Cyan "  Creating OU: $OUName"
     mkdir ( '.\OU=' + $OUName ) | Out-Null
