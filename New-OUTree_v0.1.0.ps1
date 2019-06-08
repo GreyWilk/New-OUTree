@@ -32,7 +32,3 @@ foreach($OUName in $OUNames){
 
 cd C:\
 }
-
-New-OUTree -Domain one.mydomain.local -OUNames OUOne,OUTwo,OUThree
-
-
