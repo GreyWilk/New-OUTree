@@ -8,6 +8,9 @@ param(
 ## Check if AD module is installed
 if (Get-Module -ListAvailable -Name ActiveDirectory) { Write-Host -ForegroundColor Green "ActiveDirectory module exists" } else { Write-Warning "ActiveDirectory module does not exist. Exiting."; break }
 
+## Importing ActiveDirectory module
+Import-Module ActiveDirectory
+
 ## Validate domain name
 if( !($Domain -match "(?=^.{4,253}$)(^((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\.)+[a-zA-Z]{2,63}$)") -eq $true) { Write-Warning "Domain name not acceptable."; break }
 
